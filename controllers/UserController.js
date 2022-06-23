@@ -37,10 +37,8 @@ class UserController {
 
             let result = Object.assign({}, userOld, values);
 
-            console.log(result);
-
             this.getPhoto(this.formUpdateEl).then(
-                content => {
+                (content) => {
 
                     if (!values.photo) {
                         result._photo = userOld._photo;
@@ -51,10 +49,10 @@ class UserController {
                     tr.dataset.user = JSON.stringify(values);
 
                     tr.innerHTML = `
-                        <td><img src="${values._photo}" alt="User Image" class="img-circle img-sm"></td>
-                        <td>${values._name}</td>
-                        <td>${values._email}</td>
-                        <td>${(values._admin) ? 'Yes' : 'No'}</td>
+                        <td><img src="${result._photo}" class="img-circle img-sm"></td>
+                        <td>${result._name}</td>
+                        <td>${result._email}</td>
+                        <td>${(result._admin) ? 'Yes' : 'No'}</td>
                         <td>${Utils.dateFormat(result._register)}</td>
                         <td>
                             <button type="button" class="btn btn-primary btn-edit btn-xs btn-flat">Editar</button>
@@ -67,10 +65,10 @@ class UserController {
                     this.updateCount();
     
                     this.formUpdateEl.reset();
-    
-                    btn.disabled = false;
-
+                    
                     this.showPanelCreate();
+
+                    btn.disabled = false;
     
                 }, 
                 (e) => {
@@ -98,26 +96,24 @@ class UserController {
             if (!values) return false;
             
             this.getPhoto(this.formEl).then(
-                
-            (content) => {
+                (content) => {
 
-                values.photo = content;
-                this.addLine(values);
+                    values.photo = content;
+                    this.addLine(values);
 
-                this.formEl.reset();
+                    this.formEl.reset();
 
-                btn.disabled = false;
+                    btn.disabled = false;
 
-            }, 
-            (e) => {
-                console.error(e);
-            }
-            
-        );
+                }, 
+                (e) => {
+                    console.error(e);
+                }
+            );
 
-    });
+        });
 
-}
+    }
 
     getPhoto(formEl) {
 
@@ -127,9 +123,11 @@ class UserController {
 
             let elements = [...formEl.elements].filter(item=>{
 
-            if (item.name === 'photo') return item;
+            if (item.name === 'photo') {
+                return item;
+            }
 
-         });
+        });
 
         let file = elements[0].files[0]
 
